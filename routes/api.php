@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -28,9 +29,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Admin
     Route::group(['middleware' => 'role:Admin', 'prefix' => 'admin'], function () {
-
         //CRUD User
         Route::apiResource('users', UserController::class);
-
+        //CRUD Product
+        Route::apiResource('products', ProductController::class)->except('update');
+        Route::post('/products/{product}', [ProductController::class, 'update']);
     });
 });
