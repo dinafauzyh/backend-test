@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -18,11 +17,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        
-        if($users) {
-            return $this->success($users, 'Users data retrieved successfully');
-        } else {
+
+        if ($users->isEmpty()) {
             return $this->error('Users data not found', 404);
+        } else {
+            return $this->success($users, 'Users data retrieved successfully');
         }
     }
 
@@ -40,7 +39,7 @@ class UserController extends Controller
                 'fullname' => $request->fullname,
                 'username' => $request->username,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => bcrypt($request->password),
                 'role' => $request->role,
             ]);
 
@@ -59,10 +58,10 @@ class UserController extends Controller
      */
     public function show($user)
     {
-        $user = User::find($user);
+        $userData = User::find($user);
 
-        if($user) {
-            return $this->success($user, 'User data retrieved successfully');
+        if ($userData) {
+            return $this->success($userData, 'User data retrieved successfully');
         } else {
             return $this->error('User data not found', 404);
         }
@@ -78,19 +77,19 @@ class UserController extends Controller
     public function update(UserRequest $request, $user)
     {
         try {
-            $user = User::find($user);
+            $userData = User::find($user);
             
-            if(!$user) {
+            if(!$userData) {
                 return $this->error('User not found', 404);
             } else {
-                $user->update([
+                $userData->update([
                     'fullname' => $request->fullname,
                     'username' => $request->username,
                     'email' => $request->email,
-                    'password' => $request->password,
+                    'password' => bcrypt($request->password),
                     'role' => $request->role,
                 ]);
-                return $this->success($user, 'User updated successfully');
+                return $this->success($userData, 'User updated successfully');
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -109,7 +108,7 @@ class UserController extends Controller
         try {
             $user = User::find($user);
 
-            if($user) {
+            if ($user) {
                 $user->delete();
                 return $this->success($user, 'User deleted successfully');
             } else {
