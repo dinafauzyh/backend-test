@@ -133,6 +133,7 @@ class ProductController extends Controller
 
             if ($productData) {
                 $productData->delete();
+                unlink($productData->image);
                 return $this->success($productData, 'Product deleted successfully');
             } else {
                 return $this->error('Product not found', 404);
