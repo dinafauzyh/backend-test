@@ -80,9 +80,16 @@ class CartController extends Controller
      * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function show(Cart $cart)
+    public function show($cart)
     {
-        //
+        //show product by cart id
+        $productOnCart = Cart::with('product')->where('id', $cart)->first();
+
+        if (!$productOnCart) {
+            return $this->error('Product not found!', 404);
+        } else {
+            return $this->success($productOnCart, 'Product data retrieved successfully');
+        }
     }
 
     /**
