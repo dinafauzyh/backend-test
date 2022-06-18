@@ -12,4 +12,14 @@ class Product extends Model
     protected $guarded = [
         'id'
     ];
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function transaction_details()
+    {
+        return $this->hasMany(TransactionDetail::class);
+    }
 }

@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +36,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //CRUD Product
         Route::apiResource('products', ProductController::class)->except('update');
         Route::post('/products/{product}', [ProductController::class, 'update']);
+    });
+
+    //User
+    Route::group(['middleware' => 'role:Customer'], function () {
+        //Cart
+        Route::apiResource('carts', CartController::class)->except('destroy');
+        Route::delete('carts/{cart?}', [CartController::class, 'destroy']);
+        //Transaction
+        Route::apiResource('transactions', TransactionController::class)->except(['index', 'destroy']);
     });
 });
