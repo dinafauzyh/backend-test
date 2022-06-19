@@ -141,7 +141,7 @@ class CartController extends Controller
      * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy($cart =null)
+    public function destroy($cart = null)
     {
         try {
             if ($cart != null) {
