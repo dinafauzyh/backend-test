@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //CRUD Product
         Route::apiResource('products', ProductController::class)->except('update');
         Route::post('/products/{product}', [ProductController::class, 'update']);
+        //Get All Transactions Data
+        Route::get('transactions', [TransactionController::class, 'index']);
     });
 
     //User
@@ -44,6 +46,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::apiResource('carts', CartController::class)->except('destroy');
         Route::delete('carts/{cart?}', [CartController::class, 'destroy']);
         //Transaction
-        Route::apiResource('transactions', TransactionController::class)->except(['index', 'destroy']);
+        Route::apiResource('transactions', TransactionController::class)->except(['index', 'destroy', 'update']);
     });
 });
